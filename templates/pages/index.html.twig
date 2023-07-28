@@ -24,9 +24,9 @@
                            <h6 class=""> Ajouté le : {{ livre.createdAt|format_datetime('full', 'short', locale='fr') }}</h6>
                            <h6> Modifié le : {{ livre.updatedAt|format_datetime('full', 'short', locale='fr') }}</h6>
                         </div>
-                        <div class="d-flex justify-content-around mt-auto">
-                            <a href="{{ path('app.edit', {'id':livre.id}) }}" class="btn btn-success">Modifer</a>
-                            <a onclick="event.preventDefault(); confirm('Confirmer la suppression') && document.querySelector('#delete_{{livre.id}}').submit()"  href="#" class="btn btn-danger">Suipprimer</a>
+                        <div class="d-flex justify-content-around mt-auto gap-3">
+                            <a href="{{ path('app.edit', {'id':livre.id}) }}" class="btn btn-success w-50">Modifer</a>
+                            <a onclick="event.preventDefault(); confirm('Confirmer la suppression de livre') && document.querySelector('#delete_{{livre.id}}').submit()"  href="#" class="btn btn-danger w-50">Supprimer</a>
                         </div>
                             <form id="delete_{{livre.id}}" action="{{path('app.delete', {'id' : livre.id}) }}" method="post">
 								<input type="hidden" name="csrf_token" value="{{csrf_token('delete_'~livre.id) }}">
