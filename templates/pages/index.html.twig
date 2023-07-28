@@ -1,0 +1,41 @@
+{% extends 'themes/base.html.twig' %}
+{% block main %}
+    <h1 class="text-center display-5 my-3">Liste des livres</h1>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+        {% if livres|length == 0 %}
+		    <p class="mt-5 text-center ">Acun livre pour l'instant</p>
+	    {% else %}
+        <div class="container-fluid row">
+            {% for livre in livres %}
+                <div class="col-md-4 d-flex mb-4">
+                    <div class="card shadow" style="width:40rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">Title : {{livre.title}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted ">Autor : {{ livre.author ? livre.author : "Pas d'auteur"}}</h6>
+                        <h6 class="card-subtitle mb-2 ">Genre : {{ livre.genre ? livre.genre : "Pas de genre"}}</h6>
+                        <h6 class="card-subtitle mb-2 ">Note : {{ livre.note ? livre.note : "Pas de note " }}/10 </h6>
+                        <hr>
+                        <div class="mb-5">
+                           <h6 class=""> Ajouté le : {{ livre.createdAt|format_datetime('full', 'short', locale='fr') }}</h6>
+                           <h6> Modifié le : {{ livre.updatedAt|format_datetime('full', 'short', locale='fr') }}</h6>
+                        </div>
+                        <div class="d-flex justify-content-around mt-auto">
+                            <a href="{{ path('app.edit', {'id':livre.id}) }}" class="btn btn-success">Modifer</a>
+                            <a onclick="event.preventDefault(); confirm('Confirmer la suppression') && document.querySelector('#delete_{{livre.id}}').submit()"  href="#" class="btn btn-danger">Suipprimer</a>
+                        </div>
+                            <form id="delete_{{livre.id}}" action="{{path('app.delete', {'id' : livre.id}) }}" method="post">
+								<input type="hidden" name="csrf_token" value="{{csrf_token('delete_'~livre.id) }}">
+								<input type="hidden" name="_method" value="DELETE">
+							</form>
+                      </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+{% endblock %}
